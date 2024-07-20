@@ -1,11 +1,13 @@
-'use client'; 
+// src/app/addRoute/page.js
+"use client";
+
 import { useState } from 'react';
 import MapComponent from '../components/map';
-import styles from '../addRoute/addRoute.module.css'; // Import CSS module for AddRoutePage
+import styles from '../addRoute/addRoute.module.css';
 
 export default function AddRoutePage() {
   const [routeName, setRouteName] = useState('');
-  const [routeColor, setRouteColor] = useState('#ff0000'); // Default color
+  const [routeColor, setRouteColor] = useState('#000000'); // Default color
   const [routeDescription, setRouteDescription] = useState('');
   const [routeCoordinates, setRouteCoordinates] = useState([]);
 
@@ -13,44 +15,41 @@ export default function AddRoutePage() {
     setRouteColor(e.target.value);
   };
 
-  const handleMapClick = (e) => {
-    if (routeCoordinates.length < 20) {
-      setRouteCoordinates([...routeCoordinates, e.latlng]);
-    }
+  const handleMapClick = (coordinates) => {
+    setRouteCoordinates(coordinates);
   };
 
-  const removeCoordinate = (index) => {
-    setRouteCoordinates(routeCoordinates.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Prepare data to be submitted
+
     const formData = {
       routeName,
       routeColor,
       routeDescription,
-      routeCoordinates: routeCoordinates.map(coord => ({ lat: coord.lat, lng: coord.lng })),
+      routeCoordinates,
     };
-    console.log('Form Data:', formData);
+    
 
-    // Example of sending data to backend or performing other actions
-    // Replace with actual submission logic
-    // fetch('/api/submitRoute', {
-    //   method: 'POST',
-    //   body: JSON.stringify(formData),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // }).then(response => response.json())
-    //   .then(data => console.log('Submitted:', data))
-    //   .catch(error => console.error('Error:', error));
+    console.log('Form Data:', formData); // Check if formData is correctly populated
 
-    // You can reset form fields here if needed
-    setRouteName('');
-    setRouteColor('#ff0000');
-    setRouteDescription('');
-    setRouteCoordinates([]);
+    try {
+      const response = await fetch('http://localhost:3000/api/sendRoute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit route');
+      }
+
+      const data = await response.json();
+      console.log('Route submitted successfully:', data);
+    } catch (error) {
+      console.error('Error submitting route:', error);
+    }
   };
 
   return (
@@ -90,24 +89,11 @@ export default function AddRoutePage() {
           />
         </div>
         <div className={styles.mapSection}>
-          <MapComponent onMapClick={handleMapClick} routeCoordinates={routeCoordinates} />
-          <div className={styles.coordinatesSection}>
-            {routeCoordinates.map((coord, idx) => (
-              <div key={idx} className={styles.coordinate}>
-                {coord && typeof coord.lat === 'number' && typeof coord.lng === 'number' ? (
-                  `Point ${idx + 1}: Lat: ${coord.lat.toFixed(6)}, Lng: ${coord.lng.toFixed(6)}`
-                ) : (
-                  'Invalid coordinates'
-                )}
-                <button type="button" onClick={() => removeCoordinate(idx)} className={styles.removeButton}>
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
+          <MapComponent onMapClick={handleMapClick} />
         </div>
         <button type="submit" className={styles.submitButton}>Submit</button>
       </form>
     </div>
   );
 }
+ 

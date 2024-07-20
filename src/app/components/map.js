@@ -1,17 +1,9 @@
-
-'use client'; 
-
+"use client";
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvents } from 'react-leaflet';
 import { useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import styles from './map.module.css';
-// import MySvg from '/public/mybussvg.svg'; 
-
-
-
-
-
 
 // Custom marker icon
 const customIcon = L.icon({
@@ -20,14 +12,17 @@ const customIcon = L.icon({
   iconAnchor: [50, 57], // Position of the icon anchor (relative to the top left corner of the icon)
 });
 
-const MapComponent = () => {
+const MapComponent = ({ onMapClick }) => {
   const [positions, setPositions] = useState([]);
 
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
-        if (positions.length < 20) {
-          setPositions([...positions, e.latlng]);
+        const newCoord = { lat: e.latlng.lat, lng: e.latlng.lng };
+        if (positions.length < 100) {
+          const newPositions = [...positions, newCoord];
+          setPositions(newPositions);
+          onMapClick(newPositions); // Send updated coordinates to parent component
         }
       }
     });
@@ -35,11 +30,14 @@ const MapComponent = () => {
   };
 
   const removePosition = (index) => {
-    setPositions(positions.filter((_, i) => i !== index));
+    const newPositions = positions.filter((_, i) => i !== index);
+    setPositions(newPositions);
+    onMapClick(newPositions); // Send updated coordinates to parent component
   };
 
   const resetMap = () => {
     setPositions([]);
+    onMapClick([]); // Send updated coordinates to parent component
   };
 
   return (
