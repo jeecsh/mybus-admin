@@ -1,0 +1,59 @@
+.container {
+  width: 900px;
+  max-width: 1200px; /* Increase the max-width to accommodate both map and form */
+  margin: auto;
+  padding: 1em;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+.success {
+  color: green;
+  text-align: center;
+}
+
+.formGroup {
+  margin-bottom: 1em;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: row; /* Arrange items side by side */
+  gap: 1em; /* Space between form and map */
+}
+
+.formSection {
+  flex: 1; /* Allow form to take available space */
+}
+
+.mapSection {
+  flex: 1; /* Allow map to take available space */
+  min-width: 300px; /* Ensure map has a minimum width */
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5em;
+}
+
+.button {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  margin-top: 1em;
+}

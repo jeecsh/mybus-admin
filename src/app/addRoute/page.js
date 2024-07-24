@@ -6,6 +6,7 @@ import MapComponent from '../components/map';
 import styles from '../addRoute/addRoute.module.css';
 
 export default function AddRoutePage() {
+  const [routeId, setRouteId] = useState('');
   const [routeName, setRouteName] = useState('');
   const [routeColor, setRouteColor] = useState('#000000'); // Default color
   const [routeDescription, setRouteDescription] = useState('');
@@ -23,6 +24,7 @@ export default function AddRoutePage() {
     e.preventDefault();
 
     const formData = {
+      routeId,
       routeName,
       routeColor,
       routeDescription,
@@ -63,6 +65,17 @@ export default function AddRoutePage() {
             id="routeName"
             value={routeName}
             onChange={(e) => setRouteName(e.target.value)}
+            className={styles.inputField}
+            required
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label htmlFor="routeName" className={styles.label}>Route id:</label>
+          <input
+            type="text"
+            id="routeName"
+            value={routeId}
+            onChange={(e) => (setRouteId.target.value)}
             className={styles.inputField}
             required
           />
