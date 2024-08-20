@@ -1,23 +1,4 @@
-import { NextResponse } from 'next/server';
-import firebaseAdmin from 'firebase-admin';
-import path from 'path';
-import fs from 'fs';
-
-// Initialize Firebase Admin SDK if not already initialized
-if (!firebaseAdmin.apps.length) {
-  const serviceAccountPath = path.resolve(process.cwd(), '../../../../../credentials/sdkfirebase.json');
-  
-  if (!fs.existsSync(serviceAccountPath)) {
-    throw new Error(`Service account key file not found at ${serviceAccountPath}`);
-  }
-
-  const serviceAccount = require(serviceAccountPath);
-  firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(serviceAccount)
-  });
-}
-
-const db = firebaseAdmin.firestore();
+import { db } from '../../lib/firebaseAdmin.js';
 
 export async function GET(req) {
   try {

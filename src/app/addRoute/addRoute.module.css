@@ -1,84 +1,94 @@
-/* styles/AddRoute.module.css */
+/* src/addRoute/addRoute.module.css */
+.pageLayout {
+  display: flex;
+  flex-direction: column;
+
+  background-color: rgb(236, 236, 236);
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 10px; /* Adjust width as needed */
+  border-right: 0.5px solid rgb(223, 222, 222);
+  background-color: white;
+  position: fixed; /* Keeps the sidebar fixed on the left */
+ /* Adjust to match the height of the Navbar */
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  height: calc(100vh - 57px);
+  z-index: 1000;
+}
+.tit{
+  color: #ffb51e;
+
+ 
+}
+.content {
+margin-top: 100px;
+  margin-left: 300px; 
+  margin-right: 200px;/* Width of the sidebar */
+  padding: 20px;
+  flex: 4;
+  overflow-y: auto;
+  width: 100px;
+}
 
 .container {
+  max-width: 1200px; /* Set a max width for better readability */
+  margin: 0 auto; /* Center the content */
+}
 
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f5f5f5;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 900px;
-height: auto;
-  }
-  
-  .formGroup {
-    margin-bottom: 20px;
-  }
-  
-  .label {
-    margin-bottom: 8px;
-    font-weight: bold;
-    margin-right: 30px;
-  }
-  
-  .inputField,
-  .textareaField,
-  .colorPicker {
- display: flex;
- top: 100px;
-    width: 50%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: border-color 0.3s ease;
-  }
-  
-  .inputField:focus,
-  .textareaField:focus,
-  .colorPicker:focus {
-    outline: none;
-   
-    border-color: #0070f3;
-    box-shadow: 0 0 5px rgba(0, 112, 243, 0.5);
-  }
-  
-  .textareaField {
-    resize: vertical;
-    min-height: 120px;
-  }
-  
-  .colorPicker {
-    height: 40px;
-    width: 40px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-  }
-  
-  .submitButton {
-    margin-top: 50px; /* Adjust margin top as needed */
-    margin-bottom: 50px; /* Adjust margin bottom as needed */
-    padding: 12px 24px;
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: fit-content; /* Adjust width as needed */
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 300px;
-    font-size: 20px;
-  }
-  
-  
-  .submitButton:hover {
-  
-    background-color: #005bb5;
-  }
-  
-  
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  color: #032975;}
+.inputField, .colorPicker, .textareaField {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid lightgray;
+}
+
+.colorPicker {
+  height: 30px;
+}
+
+.textareaField {
+  resize: vertical;
+}
+
+.submitButton {
+  padding: 10px 20px;
+  background-color:#032975;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 100px;
+  margin-left: 300px;
+  margin-right: 300px;
+  width: 200px;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  border-bottom: 0.5px solid rgb(223, 222, 222);
+  background-color: white;
+  color: rgb(122, 122, 122);
+  font-size: 14px;
+  z-index: 1000;
+}

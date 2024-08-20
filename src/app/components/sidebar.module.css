@@ -1,23 +1,23 @@
 .sidebar {
-    flex: 1;
+    width: 200px; /* Adjust width as needed */
     border-right: 0.5px solid rgb(223, 222, 222);
-    min-height: 100vh;
-    background-color: white;
+    background-color: #032975; /* Dark blue background */
+    position: fixed; /* Keeps the sidebar fixed on the left */
+    top: 40px; /* Adjust to match the height of the Navbar */
+    bottom: 0;
+    left: 0;
+    overflow:none; /* Allows scrolling if the content exceeds the height */
+    z-index: 900; /* Ensure it's above other content */
 }
 
 .sidebar .top {
-    height: 50px;
+    height: 20px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center; /* Center content vertically */
 }
 
-.sidebar .logo {
-    font-weight: bolder;
-    font-size: 40px;
-    font-family: 'Dancing Script', cursive;
-    color:rgb(0, 110, 255);
-}
+
 
 .sidebar hr {
     margin-top: 7px;
@@ -27,45 +27,77 @@
 
 .sidebar .center {
     padding-left: 10px;
+    margin-top: 10px; /* Space from the top */
 }
 
 .sidebar .center ul {
     list-style: none;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
-.sidebar .center .tittle {
+.sidebar .center .title {
     font-size: 11px;
-    color: rgb(201, 200, 200);
+    color: #ffb51e;
     font-weight: bold;
-    margin-top: 15px;
-    margin-bottom: 5px;
+ 
+    margin-bottom: 10px; /* Space below the title */
 }
 
 .sidebar .center li {
     display: flex;
     align-items: center;
-    padding: 5px;
+    padding: 10px; /* Adjust padding for better spacing */
     cursor: pointer;
+    /* Full width of the sidebar */
+    position: relative; /* Allows positioning of the pseudo-element */
+    overflow: hidden; /* Hide overflow for smooth effect */
+    color: #ffffff; /* Default text color */
+    transition: color 0.3s ease; /* Smooth transition for text color */
 }
 
-.sidebar .center li:hover {
-    color: rgb(0, 110, 255);
-    font-size: 14px;
-    width: 50px;
+.sidebar .center li::before {
+    content: ''; /* No content needed */
+    position: absolute; /* Positioned absolutely within the `li` */
+    top: 0;
+    left: 100%; /* Start off-screen to the right */
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 110, 255, 0.1); /* Hover color */
+    transition: left 0.3s ease; /* Smooth transition from right to left */
+    z-index: -1; /* Behind the text */
 }
+
+.sidebar .center li:hover::before {
+    left: 0; /* Move the color from right to left on hover */
+}
+
+.sidebar .center li:hover span {
+    color: #ececec /* Change text color on hover */
+}
+.sidebar .center li:hover .icon{
+    color: #ffb51e; /* Change text color on hover */
+}
+.sidebar .center a {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit color from parent */
+    width: 100%; /* Ensure the link fills the `li` */
+    position: relative; /* Needed for stacking context with pseudo-element */
+}
+
 
 .sidebar .center .icon {
     font-size: 23px;
-    color: rgb(0, 110, 255);
-    margin-right: 5px;
+    color: #ffffff; /* White icon color */
+    margin-right: 10px; /* Space between icon and text */
 }
 
 .sidebar .center span {
     font-size: 13px;
     font-weight: 600;
-    color: rgb(156, 154, 154);
+    color: rgb(255, 255, 255); /* White text color */
 }
 
 .sidebar .bottom {
@@ -73,10 +105,10 @@
     margin: 10px;
     align-items: center;
     margin-left: 18px;
-    margin-top: 15px;
+    margin-top: auto; /* Pushes the bottom content to the bottom */
 }
 
-.sidebar .bottom .coloroptions {
+.sidebar .bottom .colorOptions {
     width: 20px;
     height: 20px;
     border-radius: 5px;
@@ -84,11 +116,11 @@
     cursor: pointer;
 }
 
-.sidebar .bottom .coloroptions:nth-child(1) {
+.sidebar .bottom .colorOptions:nth-child(1) {
     background-color: whitesmoke;
     margin-right: 5px;
 }
 
-.sidebar .bottom .coloroptions:nth-child(2) {
+.sidebar .bottom .colorOptions:nth-child(2) {
     background-color: rgb(32, 32, 32);
 }

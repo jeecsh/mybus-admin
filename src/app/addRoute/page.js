@@ -2,6 +2,8 @@
 "use client";
 
 import { useState } from 'react';
+import Navbar from '../components/navbar'; // Adjust the import path as needed
+import Sidebar from '../components/sidebar'; // Adjust the import path as needed
 import MapComponent from '../components/map';
 import styles from '../addRoute/addRoute.module.css';
 
@@ -30,7 +32,6 @@ export default function AddRoutePage() {
       routeDescription,
       routeCoordinates,
     };
-    
 
     console.log('Form Data:', formData); // Check if formData is correctly populated
 
@@ -55,58 +56,63 @@ export default function AddRoutePage() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Add Route</h1>
-      <form onSubmit={handleSubmit}>
-        <div className={styles.formGroup}>
-          <label htmlFor="routeName" className={styles.label}>Route Name:</label>
-          <input
-            type="text"
-            id="routeName"
-            value={routeName}
-            onChange={(e) => setRouteName(e.target.value)}
-            className={styles.inputField}
-            required
-          />
+    <div className={styles.pageLayout}>
+      <Navbar className={styles.navbar} />
+      <div className={styles.mainContent}>
+        <Sidebar className={styles.sidebar}/>
+        <div className={styles.content}>
+          <h1 className={styles.tit}>Add Route</h1>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+              <label htmlFor="routeName" className={styles.label}>Route Name:</label>
+              <input
+                type="text"
+                id="routeName"
+                value={routeName}
+                onChange={(e) => setRouteName(e.target.value)}
+                className={styles.inputField}
+                required
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="routeId" className={styles.label}>Route ID:</label>
+              <input
+                type="text"
+                id="routeId"
+                value={routeId}
+                onChange={(e) => setRouteId(e.target.value)}
+                className={styles.inputField}
+                required
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="routeColor" className={styles.label}>Route Color:</label>
+              <input
+                type="color"
+                id="routeColor"
+                value={routeColor}
+                onChange={handleColorChange}
+                className={styles.colorPicker}
+                required
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="routeDescription" className={styles.label}>Description:</label>
+              <textarea
+                id="routeDescription"
+                value={routeDescription}
+                onChange={(e) => setRouteDescription(e.target.value)}
+                className={styles.textareaField}
+                rows="4"
+              />
+            </div>
+            <div className={styles.mapSection}>
+              <MapComponent onMapClick={handleMapClick} />
+            </div>
+            <button type="submit" className={styles.submitButton}>Submit</button>
+          </form>
         </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="routeName" className={styles.label}>Route id:</label>
-          <input
-            type="text"
-            id="routeName"
-            value={routeId}
-            onChange={(e) => (setRouteId.target.value)}
-            className={styles.inputField}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="routeColor" className={styles.label}>Route Color:</label>
-          <input
-            type="color"
-            id="routeColor"
-            value={routeColor}
-            onChange={handleColorChange}
-            className={styles.colorPicker}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="routeDescription" className={styles.label}>Description:</label>
-          <textarea
-            id="routeDescription"
-            value={routeDescription}
-            onChange={(e) => setRouteDescription(e.target.value)}
-            className={styles.textareaField}
-            rows="4"
-          />
-        </div>
-        <div className={styles.mapSection}>
-          <MapComponent onMapClick={handleMapClick} />
-        </div>
-        <button type="submit" className={styles.submitButton}>Submit</button>
-      </form>
+      </div>
     </div>
   );
 }
- 

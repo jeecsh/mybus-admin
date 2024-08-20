@@ -1,71 +1,90 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
-import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined';
-import NotificationAddOutlinedIcon from '@mui/icons-material/NotificationAddOutlined';
-import styles from './sidebar.module.css'; // Import CSS module
 import NaturePeopleOutlinedIcon from '@mui/icons-material/NaturePeopleOutlined';
+import NotificationAddOutlinedIcon from '@mui/icons-material/NotificationAddOutlined';
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
+import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import styles from './sidebar.module.css'; // Import CSS module
+import Link from 'next/link';
+// Import Image component from next/image
 
 const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
-      <div className={styles.top}>
-        <span className={styles.logo}>mybus Admin</span>
-      </div>
+   
       <hr />
       <div className={styles.center}>
         <ul>
           <p className={styles.title}>Main</p>
           <li>
-            <DashboardIcon className={styles.icon} />
-            <span>Dashboard</span>
+            <Link href="/dashboard" legacyBehavior>
+              <a className={styles.link}>
+                <DashboardIcon className={styles.icon} />
+                <span>Dashboard</span>
+              </a>
+            </Link>
           </li>
           <p className={styles.title}>Lists</p>
-       
-           
-            <li>
-            <DirectionsBusOutlinedIcon className={styles.icon} />
-            <span>add bus</span>
-          </li>
-            <li>
-            <NaturePeopleOutlinedIcon className={styles.icon} />
-            <span>add stations</span>
+          <li>
+            <Link href="/addRoute" legacyBehavior>
+              <a className={styles.link}>
+                <DirectionsBusOutlinedIcon className={styles.icon} />
+                <span>add bus</span>
+              </a>
+            </Link>
           </li>
           <li>
-            <NotificationAddOutlinedIcon  className={styles.icon} />
-            <span>add notifications</span>
+            <Link href="/stations" legacyBehavior>
+              <a className={styles.link}>
+                <NaturePeopleOutlinedIcon className={styles.icon} />
+                <span>add stations</span>
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/notification" legacyBehavior>
+              <a className={styles.link}>
+                <NotificationAddOutlinedIcon className={styles.icon} />
+                <span>add notifications</span>
+              </a>
+            </Link>
           </li>
           <p className={styles.title}>Useful</p>
           <li>
-            <LeaderboardIcon className={styles.icon} />
-            <span>stats</span>
+            <Link href="/stats" legacyBehavior>
+              <a className={styles.link}>
+                <LeaderboardIcon className={styles.icon} />
+                <span>stats</span>
+              </a>
+            </Link>
           </li>
           <li>
-            <ReportOutlinedIcon className={styles.icon} />
-            <span>issues</span>
+            <Link href="/issues" legacyBehavior>
+              <a className={styles.link}>
+                <ReportOutlinedIcon className={styles.icon} />
+                <span>issues</span>
+              </a>
+            </Link>
           </li>
-      
           <p className={styles.title}>Service</p>
           <li>
-            <SettingsSuggestOutlinedIcon className={styles.icon} />
-            <span>system health</span>
+            <Link href="/system-health" legacyBehavior>
+              <a className={styles.link}>
+                <SettingsSuggestOutlinedIcon className={styles.icon} />
+                <span>system health</span>
+              </a>
+            </Link>
           </li>
-      
           <li>
-            <SettingsOutlinedIcon className={styles.icon} />
-            <span>settings</span>
+            <Link href="/settings" legacyBehavior>
+              <a className={styles.link}>
+                <SettingsOutlinedIcon className={styles.icon} />
+                <span>settings</span>
+              </a>
+            </Link>
           </li>
-    
         </ul>
       </div>
       <div className={styles.bottom}>

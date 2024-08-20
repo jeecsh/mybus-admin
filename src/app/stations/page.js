@@ -1,9 +1,10 @@
 "use client";
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import BusLineSelector from '../components/buslineselect';
 import 'leaflet/dist/leaflet.css';
-import styles from '../stations/addStationPage.module.css';
+import styles from './addStationPage.module.css';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
@@ -17,6 +18,24 @@ export default function AddStationPage() {
   const [mapId, setMapId] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [busStations, setBusStations] = useState([]);
+
+  useEffect(() => {
+    const fetchBusStations = async () => {
+      try {
+        const response = await fetch('/api/getStation');
+        if (!response.ok) {
+          throw new Error('Failed to fetch bus stations');
+        }
+        const data = await response.json();
+        setBusStations(data);
+      } catch (error) {
+        console.error('Error fetching bus stations:', error);
+      }
+    };
+
+    fetchBusStations();
+  }, []);
 
   const busLines = [
     { id: 'busline-id-1', name: 'Bus Line 1' },
@@ -34,14 +53,14 @@ export default function AddStationPage() {
     setSuccessMessage('');
 
     const stationData = {
-      mapId,
+      Id:mapId,
       name: stationName,
-      location: stationLocation,
-      busLines: selectedBusLines,
+      loc: stationLocation,
+      lines: selectedBusLines,
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/addstation', {
+      const response = await fetch('/api/addStation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,10 +73,8 @@ export default function AddStationPage() {
       }
 
       const data = await response.json();
-      console.log('Station added successfully:', data);
       setSuccessMessage('Station added successfully!');
     } catch (error) {
-      console.error('Error adding station:', error);
       setError('Failed to add station.');
     }
   };
@@ -112,7 +129,7 @@ export default function AddStationPage() {
           </div>
           <div className={styles.mapSection}>
             <label className={styles.label}>Location</label>
-            <MapComponent center={stationLocation} onMapClick={handleMapClick} />
+            <MapComponent center={stationLocation} onMapClick={handleMapClick} busStations={busStations} />
           </div>
         </div>
       </Box>
