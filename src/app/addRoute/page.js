@@ -1,4 +1,3 @@
-// src/app/addRoute/page.js
 "use client";
 
 import { useState } from 'react';
@@ -59,9 +58,9 @@ export default function AddRoutePage() {
     <div className={styles.pageLayout}>
       <Navbar className={styles.navbar} />
       <div className={styles.mainContent}>
-        <Sidebar className={styles.sidebar}/>
+        <Sidebar className={styles.sidebar} />
         <div className={styles.content}>
-          <h1 className={styles.tit}>Add Route</h1>
+          <h1 className={styles.title}>Add Route</h1> {/* Updated class name for consistency */}
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label htmlFor="routeName" className={styles.label}>Route Name:</label>

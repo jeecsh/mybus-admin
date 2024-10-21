@@ -1,6 +1,9 @@
-"use client"
+"use client";
 
 import { useState } from 'react';
+import Navbar from '../components/navbar'; // Adjust the path as necessary
+import Sidebar from '../components/sidebar'; // Adjust the path as necessary
+import styles from './notificationsPage.module.css'; // Importing the CSS module
 
 export default function NotificationsPage() {
   const [title, setTitle] = useState('');
@@ -9,23 +12,11 @@ export default function NotificationsPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Convert the timeFrame to the desired format
-    const date = new Date(timeFrame);
-    const formattedDate = date.toLocaleString('en-US', { 
-      timeZone: 'UTC', 
-      month: 'long', 
-      day: 'numeric', 
-      year: 'numeric', 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      hour12: true 
-    }).replace(',', '');
 
-    const notification = { title, message, timeFrame: formattedDate };
+    const notification = { title, message, timeFrame };
 
     try {
-      const response = await fetch('/api/notifications', {
+      const response = await fetch('/api/notification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,54 +30,64 @@ export default function NotificationsPage() {
 
       const data = await response.json();
       console.log('Notification sent successfully:', data);
+      
+      // Reset form fields after successful submission
+      setTitle('');
+      setMessage('');
+      setTimeFrame('');
     } catch (error) {
       console.error('Error sending notification:', error);
     }
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: 'auto', padding: '1em' }}>
-      <h1>Send Notification</h1>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1em' }}>
-          <label htmlFor="title" style={{ display: 'block', marginBottom: '.5em' }}>Title</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter notification title"
-            style={{ width: '100%', padding: '.5em' }}
-            required
-          />
+    <div className={styles.container}>
+      <Navbar />
+      <div className={styles.mainContent}>
+        <Sidebar />
+        <div className={styles.formContainer}>
+          <h1 className={styles.pageTitle}>Send Notification</h1>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+              <label htmlFor="title" className={styles.label}>Title</label>
+              <input
+                type="text"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter notification title"
+                className={styles.input}
+                required
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="message" className={styles.label}>Message</label>
+              <textarea
+                id="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Enter notification message"
+                className={styles.textarea}
+                required
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="timeFrame" className={styles.label}>Time Frame</label>
+              <input
+                type="datetime-local"
+                id="timeFrame"
+                value={timeFrame}
+                onChange={(e) => setTimeFrame(e.target.value)}
+                className={styles.input}
+                required
+              />
+            </div>
+            <button type="submit" className={styles.submitButton}>
+              Send Notification
+            </button>
+          </form>
         </div>
-        <div style={{ marginBottom: '1em' }}>
-          <label htmlFor="message" style={{ display: 'block', marginBottom: '.5em' }}>Message</label>
-          <textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Enter notification message"
-            style={{ width: '100%', padding: '.5em', minHeight: '100px' }}
-            required
-          />
-        </div>
-        <div style={{ marginBottom: '1em' }}>
-          <label htmlFor="timeFrame" style={{ display: 'block', marginBottom: '.5em' }}>Time Frame</label>
-          <input
-            type="datetime-local"
-            id="timeFrame"
-            value={timeFrame}
-            onChange={(e) => setTimeFrame(e.target.value)}
-            placeholder="Enter time frame"
-            style={{ width: '100%', padding: '.5em' }}
-            required
-          />
-        </div>
-        <button type="submit" style={{ padding: '.5em 1em', backgroundColor: '#0070f3', color: 'white', border: 'none', cursor: 'pointer' }}>
-          Send Notification
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

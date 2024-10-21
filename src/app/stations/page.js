@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import BusLineSelector from '../components/buslineselect';
+import Navbar from '../components/navbar'; // Import Navbar
+import Sidebar from '../components/sidebar'; // Import Sidebar
 import 'leaflet/dist/leaflet.css';
 import styles from './addStationPage.module.css';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField';  
 
 // Dynamically import the Map component to ensure it only renders on the client side
 const MapComponent = dynamic(() => import('../components/mapComponent'), { ssr: false });
@@ -52,11 +54,17 @@ export default function AddStationPage() {
     setError('');
     setSuccessMessage('');
 
+    // Format location as required for geopoint with degree sign
+    const formattedLocation = [
+      `${stationLocation[0]}°N`, // Latitude with degree sign and N suffix
+      `${stationLocation[1]}°E`  // Longitude with degree sign and E suffix
+    ];
+
     const stationData = {
-      Id:mapId,
+      Id: mapId,
       name: stationName,
-      loc: stationLocation,
-      lines: selectedBusLines,
+      loc: formattedLocation, // Use formatted location
+      lines: selectedBusLines.map(line => line.id), // Assuming lines should be an array of IDs
     };
 
     try {
@@ -81,6 +89,9 @@ export default function AddStationPage() {
 
   return (
     <div className={styles.container}>
+    <Navbar /> {/* Add the Navbar */}
+    <Sidebar /> {/* Add the Sidebar */}
+    <div className={styles.content}>
       <h1 className={styles.heading}>Add Station</h1>
       {error && <p className={styles.error}>{error}</p>}
       {successMessage && <p className={styles.success}>{successMessage}</p>}
@@ -117,14 +128,14 @@ export default function AddStationPage() {
               <TextField
                 id="outlined-location"
                 label="Location"
-                value={`${stationLocation[0]}, ${stationLocation[1]}`}
+                value={`[${stationLocation[0]}°N, ${stationLocation[1]}°E]`} // Format for display
                 InputProps={{
                   readOnly: true,
                 }}
                 variant="outlined"
               />
               <BusLineSelector busLines={busLines} selectedBusLines={selectedBusLines} setSelectedBusLines={setSelectedBusLines} />
-              <button type="submit" className={styles.button}>Add Station</button>
+              <button type="submit" className={styles.button1}>Add Station</button>
             </div>
           </div>
           <div className={styles.mapSection}>
@@ -134,5 +145,6 @@ export default function AddStationPage() {
         </div>
       </Box>
     </div>
-  );
+  </div>
+);
 }

@@ -19,7 +19,7 @@ const Sidebar = () => {
         <ul>
           <p className={styles.title}>Main</p>
           <li>
-            <Link href="/dashboard" legacyBehavior>
+            <Link href="/" legacyBehavior>
               <a className={styles.link}>
                 <DashboardIcon className={styles.icon} />
                 <span>Dashboard</span>
