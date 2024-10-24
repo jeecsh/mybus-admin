@@ -56,19 +56,18 @@
 }
 
 .submitButton {
-    padding: 0.75em 1.5em;
     background-color: transparent; /* Transparent background for outlined button */
-    color: #032975; /* Button text color */
-    border: 2px solid #032975; /* Blue border for outlined button */
+    color: #012e61; /* Button text color */
+    border: 2px solid #02254d; /* Blue border for outlined button */
+    padding: 0.5em 1em;
+    cursor: pointer;
+    margin-top: 1em;
     border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
-    font-size: 16px; /* Button font size */
-    margin-top: 1em; /* Space above the button */
     width: 100%;
 }
-
 .submitButton:hover {
     background-color: #032975; /* Blue background on hover */
     color: white; /* White text on hover */
 }
+

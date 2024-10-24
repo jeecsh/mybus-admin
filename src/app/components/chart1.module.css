@@ -1,0 +1,27 @@
+.heroSection {
+    padding: 40px;
+    background-color: #f9fafb; /* Light gray */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.h1 {
+    text-align: center;
+    color: #1e3a8a; /* Dark blue */
+    margin-bottom: 20px;
+}
+
+.chartContainer {
+    display: flex;
+    justify-content: space-around; /* Space charts evenly */
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+.lineChart, .barChart {
+    width: 45%; /* Make the charts responsive */
+    min-width: 300px; /* Minimum width */
+    background-color: #ffffff; /* White background for charts */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
