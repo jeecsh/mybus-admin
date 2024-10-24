@@ -43,4 +43,5 @@ next-env.d.ts
 .env.sentry-build-plugin
 
 src/app/lib
-src/app/sdkFire.jsonsrc/app/sdkFire.json
+src/app/sdkFire.json
+src/app/sdkFire.json
