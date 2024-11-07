@@ -9,7 +9,7 @@ export async function GET() {
       return {
         id: doc.id,
         feedback: data.feedback,
-        timestamp: data.timestamp ? data.time.toDate() : null,  // Convert Firestore Timestamp to JS Date
+        timestamp: data.timestamp ? data.time   .toDate() : null,  // Convert Firestore Timestamp to JS Date
       };
     });
     return NextResponse.json(feedbacks);

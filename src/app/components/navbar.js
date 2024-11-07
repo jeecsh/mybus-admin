@@ -31,7 +31,7 @@ const Navbar = () => {
           <Link href="/fullscreen" className={styles.item}>
             <FullscreenExitOutlinedIcon className={styles.icon} />
           </Link>
-          <Link href="/feedback" className={styles.item}>
+          <Link href="/feedback " className={styles.item}>
             <ChatBubbleOutlineOutlinedIcon className={styles.icon} />
             <div className={styles.counter}>2</div>
           </Link>
