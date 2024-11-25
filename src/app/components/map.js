@@ -18,13 +18,16 @@ const MapComponent = ({ onMapClick }) => {
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
-        const newCoord = { lat: e.latlng.lat, lng: e.latlng.lng };
+        const newCoord = {
+          latitude: e.latlng.lat, // Convert to GeoPoint format
+          longitude: e.latlng.lng,
+        };
         if (positions.length < 100) {
           const newPositions = [...positions, newCoord];
           setPositions(newPositions);
-          onMapClick(newPositions); // Send updated coordinates to parent component
+          onMapClick(newPositions); // Send updated GeoPoints to parent component
         }
-      }
+      },
     });
     return null;
   };
@@ -32,12 +35,12 @@ const MapComponent = ({ onMapClick }) => {
   const removePosition = (index) => {
     const newPositions = positions.filter((_, i) => i !== index);
     setPositions(newPositions);
-    onMapClick(newPositions); // Send updated coordinates to parent component
+    onMapClick(newPositions); // Send updated GeoPoints to parent component
   };
 
   const resetMap = () => {
     setPositions([]);
-    onMapClick([]); // Send updated coordinates to parent component
+    onMapClick([]); // Send an empty array to parent component
   };
 
   return (
@@ -48,17 +51,28 @@ const MapComponent = ({ onMapClick }) => {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {positions.map((position, idx) => (
-          <Marker key={idx} position={position} icon={customIcon}></Marker>
+          <Marker
+            key={idx}
+            position={[position.latitude, position.longitude]} // Use latitude and longitude
+            icon={customIcon}
+          ></Marker>
         ))}
-        <Polyline positions={positions} color="blue" />
+        <Polyline
+          positions={positions.map((pos) => [pos.latitude, pos.longitude])} // Map GeoPoints to lat/lng arrays
+          color="blue"
+        />
         <MapClickHandler />
       </MapContainer>
       <div className={styles.controls}>
-        <button onClick={resetMap} className={styles.resetButton}>Reset Map</button>
+        <button onClick={resetMap} className={styles.resetButton}>
+          Reset Map
+        </button>
         {positions.map((pos, idx) => (
           <div key={idx} className={styles.coordinate}>
-            {`Lat: ${pos.lat}, Lng: ${pos.lng}`}
-            <button onClick={() => removePosition(idx)} className={styles.removeButton}>Remove</button>
+            {`Lat: ${pos.latitude}, Lng: ${pos.longitude}`}
+            <button onClick={() => removePosition(idx)} className={styles.removeButton}>
+              Remove
+            </button>
           </div>
         ))}
       </div>

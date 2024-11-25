@@ -11,14 +11,14 @@ export default function AddRoutePage() {
   const [routeName, setRouteName] = useState('');
   const [routeColor, setRouteColor] = useState('#000000'); // Default color
   const [routeDescription, setRouteDescription] = useState('');
-  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  const [routeCoordinates, setRouteCoordinates] = useState([]); // Holds GeoPoints
 
   const handleColorChange = (e) => {
     setRouteColor(e.target.value);
   };
 
   const handleMapClick = (coordinates) => {
-    setRouteCoordinates(coordinates);
+    setRouteCoordinates(coordinates); // Receive updated GeoPoints from MapComponent
   };
 
   const handleSubmit = async (e) => {
@@ -29,7 +29,7 @@ export default function AddRoutePage() {
       routeName,
       routeColor,
       routeDescription,
-      routeCoordinates,
+      routeCoordinates, // Send GeoPoints directly
     };
 
     console.log('Form Data:', formData); // Check if formData is correctly populated
@@ -60,7 +60,7 @@ export default function AddRoutePage() {
       <div className={styles.mainContent}>
         <Sidebar className={styles.sidebar} />
         <div className={styles.content}>
-          <h1 className={styles.title}>Add Route</h1> {/* Updated class name for consistency */}
+          <h1 className={styles.title}>Add Route</h1>
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label htmlFor="routeName" className={styles.label}>Route Name:</label>
