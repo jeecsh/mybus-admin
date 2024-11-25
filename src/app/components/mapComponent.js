@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 // Define the custom icon for the marker
 const customIcon = L.icon({
-  iconUrl: '/mybussvg.svg', // Adjust the path based on your actual file name and location
+  iconUrl: '/mybussvg.svg', // Adjust the path based on your actual file name and loc
   iconSize: [100, 100], // Width and height of the icon
   iconAnchor: [50, 50], // Position of the icon anchor (relative to the top left corner of the icon)
 });
@@ -31,11 +31,12 @@ export default function MapComponent({ center, onMapClick, busStations }) {
   // Fallback center in case the center prop is null or undefined
   const defaultCenter = [35.12011041069839, 33.94002914428712];
 
-  // Function to transform loc object to [lat, lng]
+  // Function to transform loc object to [lat, lng] for GeoPoint
   const transformLoc = (loc) => {
-    if (loc) {
-      return [loc._latitude, loc._longitude];
+    if (loc && (loc.latitude !== undefined || loc._latitude !== undefined) && (loc.longitude !== undefined || loc._longitude !== undefined)) {
+      return [loc.latitude || loc._latitude, loc.longitude || loc._longitude]; // Handle both property names
     }
+    console.error('Invalid loc object:', loc);
     return null;
   };
 
@@ -44,8 +45,10 @@ export default function MapComponent({ center, onMapClick, busStations }) {
     return null;
   }
 
+  console.log('Bus Stations:', busStations);
+
   return (
-    <MapContainer center={center || defaultCenter} zoom={13} style={{ height: '300px' }}>
+    <MapContainer key={JSON.stringify(center)} center={[35.12011041069839, 33.94002914428712]} zoom={13} style={{ height: '300px' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -54,6 +57,7 @@ export default function MapComponent({ center, onMapClick, busStations }) {
       <MapClickHandler onMapClick={onMapClick} />
       {busStations.map((station) => {
         const position = transformLoc(station.loc);
+        console.log(`Station ${station.id} position:`, position);
         if (position) {
           return (
             <Marker key={station.id} position={position} icon={customIcon}>
@@ -66,8 +70,8 @@ export default function MapComponent({ center, onMapClick, busStations }) {
             </Marker>
           );
         } else {
-          console.error(`Invalid location data for station ${station.id}`);
-          return null; // Skip rendering the marker if location data is invalid
+          console.error(`Invalid loc data for station ${station.id}`);
+          return null; // Skip rendering the marker if loc data is invalid
         }
       })}
     </MapContainer>

@@ -1,11 +1,12 @@
 import { db } from '../../lib/firebaseAdmin';
 import { NextResponse } from 'next/server';
+import { GeoPoint } from 'firebase-admin/firestore';  // Import the Firestore GeoPoint constructor
 
 // Function to fetch all station IDs
 const fetchStationIds = async () => {
   try {
     const snapshot = await db.collection('Bus-stations').get();
-    return snapshot.docs.map(doc => doc.id);
+    return snapshot.docs.map(doc => doc.data().id); // Fetch the 'id' field from each document
   } catch (error) {
     console.error('Error fetching station IDs:', error);
     throw new Error('Error fetching station IDs');
@@ -34,12 +35,17 @@ const shiftStationIds = async (newId) => {
       .sort()
       .reverse(); // Sort descending to avoid conflicts
     
+    console.log('IDs to shift:', idsToShift);
+
     const batch = db.batch();
-    idsToShift.forEach(id => {
+    for (const id of idsToShift) {
       const incrementedId = incrementId(id);
-      const docRef = db.collection('Bus-stations').doc(id);
-      batch.update(docRef, { id: incrementedId });
-    });
+      const snapshot = await db.collection('Bus-stations').where('id', '==', id).get();
+      snapshot.forEach(doc => {
+        batch.update(doc.ref, { id: incrementedId });
+        console.log(`Shifting ID ${id} to ${incrementedId}`);
+      });
+    }
     await batch.commit();
   } catch (error) {
     console.error('Error shifting station IDs:', error);
@@ -72,17 +78,23 @@ export async function POST(req) {
 
     const { Id, name, loc, lines } = data;
 
+    // Convert loc to Firestore GeoPoint
+    const geoPoint = new GeoPoint(parseFloat(loc.latitude), parseFloat(loc.longitude));
+
     const existingIds = await fetchStationIds();
+    console.log('Existing IDs:', existingIds);
+
     if (existingIds.includes(Id)) {
+      console.log(`ID ${Id} already exists. Shifting IDs...`);
       await shiftStationIds(Id);
     }
 
-    console.log({Id});
+    console.log({ Id });
 
     const docRef = await db.collection('Bus-stations').add({
       id: Id,
       name,
-      loc,
+      loc: geoPoint,  // Store the loc as a Firestore GeoPoint
       lines
     });
     return NextResponse.json({ message: 'Station added successfully', station_id: docRef.id }, { status: 201 });
@@ -91,4 +103,3 @@ export async function POST(req) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-  

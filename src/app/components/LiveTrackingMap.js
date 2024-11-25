@@ -39,11 +39,10 @@ const LiveTrackingMap = ({ routeId }) => {
         borderRadius: '8px', // Optional: rounded corners for the map container
         padding: '10px', // Padding around the map
         backgroundColor: '#fff', // Optional: background color
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // Optional: shadow for the box
       }}
     >
       <MapContainer 
-        center={busLocation} 
+       center={[35.12011041069839, 33.94002914428712] }
         zoom={14} 
         style={{ width: '100%', height: '100%' }}  // Ensure map takes full width and height of the container
       >

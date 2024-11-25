@@ -10,8 +10,9 @@ export default function BusLineSelector({ busLines, selectedBusLines, setSelecte
   const [selectedLine, setSelectedLine] = useState('');
 
   const handleAddLine = () => {
-    if (selectedLine && !selectedBusLines.includes(selectedLine)) {
-      setSelectedBusLines([...selectedBusLines, selectedLine]);
+    const lineId = parseInt(selectedLine, 10);
+    if (lineId && !selectedBusLines.includes(lineId)) {
+      setSelectedBusLines([...selectedBusLines, lineId]);
     }
     setSelectedLine('');
   };

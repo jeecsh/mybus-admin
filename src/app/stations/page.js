@@ -15,7 +15,7 @@ const MapComponent = dynamic(() => import('../components/mapComponent'), { ssr: 
 
 export default function AddStationPage() {
   const [stationName, setStationName] = useState('');
-  const [stationLocation, setStationLocation] = useState([51.505, -0.09]); // Default location
+  const [stationLocation, setStationLocation] = useState([51.505, -0.09]); // Default loc
   const [selectedBusLines, setSelectedBusLines] = useState([]);
   const [mapId, setMapId] = useState('');
   const [error, setError] = useState('');
@@ -57,11 +57,12 @@ export default function AddStationPage() {
     setStationLocation([e.latlng.lat, e.latlng.lng]);
   };
 
-  // Helper function to format latitude and longitude into degree format
+  // Helper function to format latitude and longitude into GeoPoint object
   const formatLocation = ([lat, lng]) => {
-    const formattedLat = `${Math.abs(lat).toFixed(6)}°${lat >= 0 ? 'N' : 'S'}`;
-    const formattedLng = `${Math.abs(lng).toFixed(6)}°${lng >= 0 ? 'E' : 'W'}`;
-    return [formattedLng, formattedLat]; // Return in [Longitude, Latitude] format
+    return {
+      latitude: lat.toFixed(6),   // Return as a GeoPoint object
+      longitude: lng.toFixed(6),
+    };
   };
 
   const handleSubmit = async (e) => {
@@ -75,14 +76,14 @@ export default function AddStationPage() {
       return; // Stop form submission
     }
 
-    // Format location as degrees with N/S and E/W suffixes
+    // Format loc as GeoPoint
     const formattedLocation = formatLocation(stationLocation);
 
     const stationData = {
       Id: mapId,
       name: stationName,
-      loc: formattedLocation, // Use formatted location [Longitude°E/W, Latitude°N/S]
-      lines: selectedBusLines.map(line => line.id), // Since IDs are already numbers, no need to extract
+      loc: formattedLocation, // Send GeoPoint object
+      lines: selectedBusLines.map(line => parseInt(line, 10)), // Ensure IDs are numbers
     };
 
     try {
@@ -144,9 +145,9 @@ export default function AddStationPage() {
                   variant="outlined"
                 />
                 <TextField
-                  id="outlined-location"
-                  label="Location"
-                  value={`[${stationLocation[0].toFixed(6)}°N, ${stationLocation[1].toFixed(6)}°E]`} // Format for display
+                  id="outlined-loc"
+                  label="loc"
+                  value={`Lat: ${stationLocation[0].toFixed(6)}, Long: ${stationLocation[1].toFixed(6)}`} // Format for display
                   InputProps={{
                     readOnly: true,
                   }}
@@ -157,7 +158,7 @@ export default function AddStationPage() {
               </div>
             </div>
             <div className={styles.mapSection}>
-              <label className={styles.label}>Location</label>
+              <label className={styles.label}>loc</label>
               {/* Conditionally render the map only if the component is mounted */}
               {isMounted && (
                 <MapComponent center={stationLocation} onMapClick={handleMapClick} busStations={busStations} />
