@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined';
 import NaturePeopleOutlinedIcon from '@mui/icons-material/NaturePeopleOutlined';
@@ -6,18 +9,33 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import MenuIcon from '@mui/icons-material/Menu'; // Import Menu icon
 import styles from './sidebar.module.css'; // Import CSS module
 import Link from 'next/link';
-// Import Image component from next/image
 
 const Sidebar = () => {
+  // State to manage sidebar visibility
+  const [isOpen, setIsOpen] = useState(true);
+
+  // Toggle sidebar visibility
+  const toggleSidebar = () => {
+
+    setIsOpen(prevState => !prevState); // Flip the state
+  };
+
   return (
-    <div className={styles.sidebar}>
-   
+    <div className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
+      <div className={styles.top}>
+        {/* Menu button to toggle sidebar visibility */}
+        <button onClick={toggleSidebar} className={styles.menuButton}>
+          <MenuIcon />
+        </button>
+      </div>
+
       <hr />
+
       <div className={styles.center}>
         <ul>
-          <p className={styles.title}>Main</p>
           <li>
             <Link href="/" legacyBehavior>
               <a className={styles.link}>
@@ -26,7 +44,6 @@ const Sidebar = () => {
               </a>
             </Link>
           </li>
-          <p className={styles.title}>Lists</p>
           <li>
             <Link href="/addRoute" legacyBehavior>
               <a className={styles.link}>
@@ -51,7 +68,6 @@ const Sidebar = () => {
               </a>
             </Link>
           </li>
-          <p className={styles.title}>Useful</p>
           <li>
             <Link href="/stats" legacyBehavior>
               <a className={styles.link}>
@@ -68,7 +84,6 @@ const Sidebar = () => {
               </a>
             </Link>
           </li>
-          <p className={styles.title}>Service</p>
           <li>
             <Link href="/system-health" legacyBehavior>
               <a className={styles.link}>
@@ -87,6 +102,7 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
+
       <div className={styles.bottom}>
         <div className={styles.colorOptions}></div>
         <div className={styles.colorOptions}></div>

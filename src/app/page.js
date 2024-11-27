@@ -1,11 +1,10 @@
 "use client";
-
-
 import styles from "./page.module.css";
 import Navbar from "./components/navbar"
 import Sidebar from './components/sidebar'
 import HeroSection from "./components/chart1";
 import RoutesOverview from "./components/routes";
+import "./fonts.css";
 
 export default function Home() {
   return (
