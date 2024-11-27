@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined';
 import NaturePeopleOutlinedIcon from '@mui/icons-material/NaturePeopleOutlined';
@@ -13,16 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu'; // Import Menu icon
 import styles from './sidebar.module.css'; // Import CSS module
 import Link from 'next/link';
 
-const Sidebar = () => {
-  // State to manage sidebar visibility
-  const [isOpen, setIsOpen] = useState(true);
-
-  // Toggle sidebar visibility
-  const toggleSidebar = () => {
-
-    setIsOpen(prevState => !prevState); // Flip the state
-  };
-
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
       <div className={styles.top}>

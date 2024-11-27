@@ -1,25 +1,32 @@
 "use client";
-import styles from "./page.module.css";
-import Navbar from "./components/navbar"
-import Sidebar from './components/sidebar'
+
+import { useState } from "react";
+import Navbar from "./components/navbar";
+import Sidebar from "./components/sidebar";
 import HeroSection from "./components/chart1";
 import RoutesOverview from "./components/routes";
-import "./fonts.css";
+import styles from "./page.module.css";
 
 export default function Home() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prevState) => !prevState);
+  };
+
   return (
     <div className={styles.container}>
- 
+      {/* Navbar */}
       <header className={styles.navbar}>
         <Navbar />
       </header>
-      <aside className={styles.sidebar}>
-        <Sidebar />
-      </aside>
-      <main className={styles.route}>
-        <RoutesOverview/>
-      </main>
-      <main className={styles.content}>
+
+      {/* Sidebar */}
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+      {/* Main Content */}
+      <main className={`${styles.mainContent} ${!isSidebarOpen ? styles.shifted : ""}`}>
+        <RoutesOverview />
         <HeroSection />
       </main>
     </div>

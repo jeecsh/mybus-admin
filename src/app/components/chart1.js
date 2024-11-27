@@ -64,7 +64,6 @@ export default function HeroSection() {
   return (
     <Box className={styles.heroSection}>
       <Typography variant="h4" className={styles.h1}>
-        Bus Tracking Dashboard
       </Typography>
       
       <Box className={styles.chartContainer}>

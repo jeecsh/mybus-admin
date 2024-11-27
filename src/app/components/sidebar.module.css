@@ -6,14 +6,13 @@
     border-right: 0.5px solid rgb(223, 222, 222);
     background-color: #032975; /* Dark blue background */
     position: fixed; /* Keeps the sidebar fixed on the left */
-    top: 60px; /* Adjust to match the height of the Navbar */
+    top: 70px; /* Adjust to match the height of the Navbar */
     bottom: 0;
     left: 0;
     overflow: hidden; /* Prevents overflow when collapsed */
     z-index: 900; /* Ensure it's above other content */
     transition: all 0.3s ease; /* Smooth transition for sidebar width */
     font-family: Manrope;
-
 }
 
 /* Sidebar open/closed states */

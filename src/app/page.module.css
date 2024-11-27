@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10;
+  background-color: #fff; /* Adjust as needed */
+}
+
+.sidebar {
+  transition: width 0.3s ease;
+  width: 250px; /* Default sidebar width */
+  background-color: #002b5b; /* Sidebar background color */
+}
+
+.sidebar.closed {
+  width: 0;
+  overflow: hidden;
+}
+
+.mainContent {
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+  margin-left: 250px; /* Matches sidebar width */
+  padding: 20px; /* Adjust as needed */
+}
+
+.mainContent.shifted {
+  margin-left: 0;
+}
