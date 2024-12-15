@@ -51,7 +51,7 @@
     width: 100%; /* Full width for inputs */
     padding: 0.75em; /* Padding for inputs */
     border: 1px solid #ccc; /* Basic border */
-    border-radius: 4px; /* Rounded corners */
+    border-radius: 15px;
     font-size: 16px; /* Font size for readability */
     transition: border-color 0.3s; /* Smooth transition on focus */
 }
@@ -72,9 +72,8 @@
     padding: 0.5em 1em;
     cursor: pointer;
     margin-top: 1em;
-    border-radius: 4px; /* Rounded corners */
+    border-radius: 15px;
     transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
-    width: 100%;
 }
 .submitButton:hover {
     background-color: #032975; /* Blue background on hover */
