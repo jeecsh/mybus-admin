@@ -22,6 +22,8 @@ export default function AddStationPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [busStations, setBusStations] = useState([]);
   const [isMounted, setIsMounted] = useState(false); // Track if the component is mounted
+  const [isSidebarOpen, setIsSidebarOpen] = useState(); // Track sidebar state
+
 
   useEffect(() => {
     setIsMounted(true); // Ensure map rendering only happens on the client
@@ -105,12 +107,16 @@ export default function AddStationPage() {
       setError('Failed to add station.');
     }
   };
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prevState) => !prevState);
+  };
 
   return (
     <div className={styles.container}>
       <Navbar /> {/* Add the Navbar */}
-      <Sidebar /> {/* Add the Sidebar */}
-      <div className={styles.content}>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+       <div className={`${styles.content} ${!isSidebarOpen ? styles.shifted : ''}`}>
+
         <h1 className={styles.heading}>Add Station</h1>
         {error && <p className={styles.error}>{error}</p>}
         {successMessage && <p className={styles.success}>{successMessage}</p>}

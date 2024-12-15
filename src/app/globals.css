@@ -1,12 +1,13 @@
 /* Global Styles */
 body {
-  background-color: #d6d6d6 !important; /* Set background color to black */
+  background-color: #ffffff !important; /* Set background color to black */
   color: #000000; /* Set text color */
   margin: 0; /* Remove default margin */
   padding: 0; /* Remove default padding */
   height: 100%;
   width: 100%;
   overflow-x: hidden;
+  font-family:Manrope;
 }
 
 html {

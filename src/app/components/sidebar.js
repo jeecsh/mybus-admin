@@ -22,7 +22,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </button>
       </div>
 
-      <hr />
 
       <div className={styles.center}>
         <ul>

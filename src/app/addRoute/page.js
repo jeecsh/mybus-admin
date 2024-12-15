@@ -1,24 +1,25 @@
 "use client";
 
 import { useState } from 'react';
-import Navbar from '../components/navbar'; // Adjust the import path as needed
-import Sidebar from '../components/sidebar'; // Adjust the import path as needed
+import Navbar from '../components/navbar'; 
+import Sidebar from '../components/sidebar'; 
 import MapComponent from '../components/map';
 import styles from '../addRoute/addRoute.module.css';
 
 export default function AddRoutePage() {
   const [routeId, setRouteId] = useState('');
   const [routeName, setRouteName] = useState('');
-  const [routeColor, setRouteColor] = useState('#000000'); // Default color
+  const [routeColor, setRouteColor] = useState('#000000');
   const [routeDescription, setRouteDescription] = useState('');
-  const [routeCoordinates, setRouteCoordinates] = useState([]); // Holds GeoPoints
+  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(); // Track sidebar state
 
   const handleColorChange = (e) => {
     setRouteColor(e.target.value);
   };
 
   const handleMapClick = (coordinates) => {
-    setRouteCoordinates(coordinates); // Receive updated GeoPoints from MapComponent
+    setRouteCoordinates(coordinates);
   };
 
   const handleSubmit = async (e) => {
@@ -29,10 +30,10 @@ export default function AddRoutePage() {
       routeName,
       routeColor,
       routeDescription,
-      routeCoordinates, // Send GeoPoints directly
+      routeCoordinates,
     };
 
-    console.log('Form Data:', formData); // Check if formData is correctly populated
+    console.log('Form Data:', formData);
 
     try {
       const response = await fetch('http://localhost:3000/api/sendRoute', {
@@ -54,12 +55,16 @@ export default function AddRoutePage() {
     }
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prevState) => !prevState);
+  };
+
   return (
     <div className={styles.pageLayout}>
-      <Navbar className={styles.navbar} />
+      <Navbar className={styles.navbar}toggleSidebar={toggleSidebar} />
       <div className={styles.mainContent}>
-        <Sidebar className={styles.sidebar} />
-        <div className={styles.content}>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <div className={`${styles.content} ${!isSidebarOpen ? styles.shifted : ''}`}>
           <h1 className={styles.title}>Add Route</h1>
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>

@@ -9,6 +9,7 @@ export default function NotificationsPage() {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [timeFrame, setTimeFrame] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(); // Track sidebar state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,13 +40,18 @@ export default function NotificationsPage() {
       console.error('Error sending notification:', error);
     }
   };
-
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prevState) => !prevState);
+  };
   return (
     <div className={styles.container}>
       <Navbar />
-      <div className={styles.mainContent}>
-        <Sidebar />
-        <div className={styles.formContainer}>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+    <div className={`${styles.content} ${!isSidebarOpen ? styles.shifted : ''}`}>
+        
+    <div className={styles.mainContent}>
+
+      <div className={styles.formContainer}>
           <h1 className={styles.pageTitle}>Send Notification</h1>
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
@@ -87,6 +93,8 @@ export default function NotificationsPage() {
             </button>
           </form>
         </div>
+        </div>
+
       </div>
     </div>
   );

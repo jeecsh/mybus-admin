@@ -8,7 +8,7 @@ import RoutesOverview from "./components/routes";
 import styles from "./page.module.css";
 
 export default function Home() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState();
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);

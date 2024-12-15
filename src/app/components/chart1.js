@@ -86,7 +86,7 @@ export default function HeroSection() {
               {
                 data: passengerData.map((entry) => entry.count),
                 label: 'Passengers',
-                color: '#3b82f6',
+                color: '#ffcc00',
               },
             ]}
             xAxis={[
@@ -120,7 +120,7 @@ export default function HeroSection() {
               {
                 data: routePopularity.map((route) => route.count),
                 label: 'Passenger Count',
-                color: '#3b82f6',
+                color: '#1e3a8a',
               },
             ]}
             xAxis={[

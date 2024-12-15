@@ -1,50 +1,56 @@
-// RoutesOverview.js
 "use client";
 import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
-import RouteDetails from "./routedetails"; // Importing the RouteDetails component
-import LiveTrackingButton from "./LiveTrackingButton"; // Assuming this is the live tracking button
+import RouteDetails from "./routedetails";
+import LiveTrackingButton from "./LiveTrackingButton"; // Existing component
 import styles from "./RoutesOverview.module.css";
 
-// Sample route data
+// Sample line data
 const routes = [
-  { id: 1, name: "Route 1" },
-  { id: 2, name: "Route 2" },
-  { id: 3, name: "Route 3" },
-  { id: 4, name: "Route 4" },
+  { id: 1, name: "Line 1" },
+  { id: 2, name: "Line 2" },
+  { id: 3, name: "Line 3" },
+  { id: 4, name: "Line 4" },
 ];
 
 export default function RoutesOverview() {
   const [selectedRoute, setSelectedRoute] = useState(null);
 
+  const handleRouteClick = (routeId) => {
+    setSelectedRoute((prev) => (prev === routeId ? null : routeId)); // Toggle selection
+  };
+
   return (
     <Box className={styles.routesOverview}>
-      <Typography variant="h4" className={styles.title}>
-        Select a Route to View Details
-      </Typography>
-
-      {/* Route selection buttons */}
-      <Box className={styles.routeButtons}>
+      {/* Route Cards Section */}
+      <Box className={styles.routeList}>
         {routes.map((route) => (
           <Box
             key={route.id}
-            className={`${styles.routeButton} ${
-              selectedRoute === route.id ? styles.active : ""
+            className={`${styles.routeCard} ${
+              selectedRoute === route.id ? styles.activeCard : ""
             }`}
-            onClick={() => setSelectedRoute(route.id)}
+            onClick={() => handleRouteClick(route.id)}
           >
-            {route.name}
+            <Box className={styles.statusCircle} />
+            <Typography className={styles.routeName}>{route.name}</Typography>
           </Box>
         ))}
       </Box>
 
-      {/* Show route details and live tracking for selected route */}
-      {selectedRoute && (
-        <Box className={styles.detailsSection}>
-          <RouteDetails routeId={selectedRoute} />
-          <LiveTrackingButton routeId={selectedRoute} />
-        </Box>
-      )}
+      {/* Details and Button Section */}
+      <Box className={styles.detailsSection}>
+        {selectedRoute ? (
+          <>
+            <RouteDetails routeId={selectedRoute} />
+            <LiveTrackingButton routeId={selectedRoute} />
+          </>
+        ) : (
+          <Typography className={styles.placeholder}>
+            Choose a line to view details.
+          </Typography>
+        )}
+      </Box>
     </Box>
   );
 }
