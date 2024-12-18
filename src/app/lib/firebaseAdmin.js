@@ -1,18 +1,21 @@
+import admin from 'firebase-admin';
 
-
-import admin from "firebase-admin";
-
-
-const serviceAccount = require('../../../credentials/secrets.json');   
+// Import your service account key from credentials
+const serviceAccount = require('../../../credentials/secrets.json');
 
 // Initialize Firebase Admin SDK if not already initialized
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL:"https://console.firebase.google.com/project/my-bus-421811/database/my-bus-421811-default-rtdb/data/?pli=1"
+    databaseURL: "https://my-bus-421811-default-rtdb.firebaseio.com"
   });
 }
 
-const db = admin.firestore();
+// Firestore initialization (no databaseURL needed for Firestore)
+const db = admin.firestore();  // Firestore
 
-export { db };
+// Realtime Database initialization
+const realtimeDb = admin.database(); // Realtime Database
+
+// Export the initialized databases and admin SDK
+export { db, realtimeDb, admin };

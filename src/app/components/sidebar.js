@@ -74,7 +74,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </Link>
           </li>
           <li>
-            <Link href="/system-health" legacyBehavior>
+            <Link href="/system" legacyBehavior>
               <a className={styles.link}>
                 <SettingsSuggestOutlinedIcon className={styles.icon} />
                 <span>system health</span>

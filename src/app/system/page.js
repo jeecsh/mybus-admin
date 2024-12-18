@@ -1,41 +1,83 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
 import styles from "./sys.module.css";
 import { 
-  Thermostat, Memory, BatteryFull, CameraAlt, RestartAlt, Speed 
+  Thermostat, Memory, BatteryFull, CameraAlt, RestartAlt, Speed, Timer 
 } from "@mui/icons-material";
 
 export default function SystemHealth() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [systemData, setSystemData] = useState({
+    temperature: 0,
+    cpuUsage: 55,
+    memoryUsage: 0,
+    voltage: 1.2,
+    lowVoltageWarning: false,
+    cameraConnected: true,
+    raspberryPiStatus: "Connected",
+    uptime: '0:00:00',
+    powerSupply: 'N/A'
+  });
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
   };
 
-  const mockData = {
-    temperature: 45.5,
-    cpuUsage: 55,
-    memoryUsage: { used: 850, total: 1024 },
-    voltage: 1.2,
-    lowVoltageWarning: false,
-    cameraConnected: true,
-    raspberryPiStatus: "Connected",
-  };
+  useEffect(() => {
+    const fetchSystemData = async () => {
+      try {
+        const response = await fetch('/api/getlocations');
+        if (!response.ok) {
+          throw new Error('Failed to fetch system data');
+        }
+        const rawData = await response.json();
+        console.log('Raw data received:', rawData);
+        
+        // Extract the actual data (first item if it's an array)
+        const data = Array.isArray(rawData) ? rawData[0] : rawData;
+        console.log('Processed data:', data);
+
+        if (data) {
+          setSystemData(prevData => ({
+            ...prevData,
+            temperature: parseFloat(data.temperature) || prevData.temperature,
+            memoryUsage: parseFloat(data.memory_usage) || prevData.memoryUsage,
+            powerSupply: data.power_supply || prevData.powerSupply,
+            uptime: data.uptime || prevData.uptime,
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching system data:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchSystemData();
+
+    // Set up real-time listener using Firebase Realtime Database
+    const realtimeUpdate = setInterval(fetchSystemData, 1000);
+
+    return () => {
+      clearInterval(realtimeUpdate);
+    };
+  }, []);
+
+  // Add console log to check if data is updating
+  useEffect(() => {
+    console.log('System data updated:', systemData);
+  }, [systemData]);
 
   return (
     <div className={styles.container}>
-      {/* Navbar */}
       <header className={styles.navbar}>
         <Navbar />
       </header>
 
-      {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-      {/* Main Content */}
       <main
         className={`${styles.mainContent} ${
           !isSidebarOpen ? styles.shifted : ""
@@ -46,8 +88,8 @@ export default function SystemHealth() {
           <Card
             title="Temperature"
             icon={<Thermostat style={{ color: "red" }} />}
-            value={`${mockData.temperature} °C`}
-            isWarning={mockData.temperature > 70}
+            value={`${systemData.temperature} °C`}
+            isWarning={systemData.temperature > 70}
           />
 
           {/* CPU Usage */}
@@ -55,7 +97,7 @@ export default function SystemHealth() {
             title="CPU Usage"
             icon={<Speed style={{ color: "blue" }} />}
             customContent={
-              <ProgressBar percentage={mockData.cpuUsage} />
+              <ProgressBar percentage={systemData.cpuUsage} />
             }
           />
 
@@ -66,27 +108,21 @@ export default function SystemHealth() {
             customContent={
               <>
                 <ProgressBar
-                  percentage={
-                    (mockData.memoryUsage.used /
-                      mockData.memoryUsage.total) *
-                    100
-                  }
+                  percentage={systemData.memoryUsage}
                 />
                 <p className={styles.smallText}>
-                  {mockData.memoryUsage.used}MB /{" "}
-                  {mockData.memoryUsage.total}MB
+                  {systemData.memoryUsage.toFixed(1)}% Used
                 </p>
               </>
             }
           />
 
-          {/* Voltage */}
+          {/* Power Supply */}
           <Card
-            title="Voltage Level"
+            title="Power Supply"
             icon={<BatteryFull style={{ color: "orange" }} />}
-            value={`${mockData.voltage}V`}
-            isWarning={mockData.lowVoltageWarning}
-            warningMessage="Low Voltage Warning!"
+            value={systemData.powerSupply}
+            isWarning={systemData.powerSupply === 'N/A'}
           />
 
           {/* Camera Status */}
@@ -95,12 +131,19 @@ export default function SystemHealth() {
             icon={
               <CameraAlt
                 style={{
-                  color: mockData.cameraConnected ? "green" : "red",
+                  color: systemData.cameraConnected ? "green" : "red",
                 }}
               />
             }
-            value={mockData.cameraConnected ? "Connected" : "Disconnected"}
-            isWarning={!mockData.cameraConnected}
+            value={systemData.cameraConnected ? "Connected" : "Disconnected"}
+            isWarning={!systemData.cameraConnected}
+          />
+
+          {/* System Uptime */}
+          <Card
+            title="System Uptime"
+            icon={<Timer style={{ color: "blue" }} />}
+            value={systemData.uptime}
           />
 
           {/* Raspberry Pi Actions */}

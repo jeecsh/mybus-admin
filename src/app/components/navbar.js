@@ -14,7 +14,7 @@ const Navbar = () => {
     <div className={styles.navbar}>
       <div className={styles.wrapper}>
         <div className={styles.top}>
-          <Image src="/BUSS3.png" alt="mybus Admin" width={100} height={100} className={styles.logo} /> 
+          <Image src="/BUSS3.png" alt="mybus Admin" width={100} height={100} className={styles.logo} priority /> 
           {/* Adjust width and height as needed */}
         </div>
         <div className={styles.item1}>

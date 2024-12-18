@@ -2,64 +2,105 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { Box } from "@mui/material";
 
-// Function to fetch route data based on routeId
-const fetchRouteData = (routeId) => {
-  // Replace this with actual API calls or real-time database connections
-  // Simulating data for different routes
-  const routeData = {
-    1: { lat: 40.748817, lng: -73.985428, nextStation: 'Station A' }, // Route 1 Data
-    2: { lat: 40.730610, lng: -73.935242, nextStation: 'Station B' }, // Route 2 Data
-    3: { lat: 40.758896, lng: -73.985130, nextStation: 'Station C' }, // Route 3 Data
-    4: { lat: 40.712776, lng: -74.005974, nextStation: 'Station D' }, // Route 4 Data
-  };
-  return routeData[routeId] || { lat: 0, lng: 0, nextStation: 'Unknown Station' };
-};
+const LiveTrackingMap = () => {
+  const [busLocations, setBusLocations] = useState([]);
 
-const LiveTrackingMap = ({ routeId }) => {
-  const [busLocation, setBusLocation] = useState({ lat: 0, lng: 0 });
-  const [nextStation, setNextStation] = useState("");
-
+  // Fix Leaflet icon issue for Next.js
   useEffect(() => {
-    // Simulate fetching data from a real-time API/database
-    const routeData = fetchRouteData(routeId);
-    setBusLocation({ lat: routeData.lat, lng: routeData.lng });
-    setNextStation(routeData.nextStation);
-  }, [routeId]);
+    // Fix default icon issues
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: "leaflet/images/marker-icon-2x.png",
+      iconUrl: "leaflet/images/marker-icon.png",
+      shadowUrl: "leaflet/images/marker-shadow.png",
+    });
+
+    const fetchBusLocations = async () => {
+      try {
+        const response = await fetch("/api/getlocations");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Received bus locations:", data);
+        
+        // Filter out any invalid data
+        const validLocations = data.filter(bus => 
+          bus && 
+          bus.latitude && 
+          bus.longitude && 
+          !isNaN(parseFloat(bus.latitude)) && 
+          !isNaN(parseFloat(bus.longitude))
+        );
+
+        setBusLocations(validLocations);
+      } catch (error) {
+        console.error("Error fetching bus locations:", error);
+      }
+    };
+
+    // Initial fetch
+    fetchBusLocations();
+    
+    // Set up polling
+    const interval = setInterval(fetchBusLocations, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Create bus icon instance
+  const busIcon = new L.Icon({
+    iconUrl: "/buaas.png",
+    iconSize: [100, 100],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+  });
 
   return (
-    <Box 
+    <Box
       sx={{
-        width: '100%',
-        maxWidth: 600,  // max width of map container
-        height: 400,  // fixed height for the map
-        margin: '20px auto', // center the map in the page
-        border: '2px solid #ddd', // Optional: border around the map container
-        borderRadius: '8px', // Optional: rounded corners for the map container
-        padding: '10px', // Padding around the map
-        backgroundColor: '#fff', // Optional: background color
+        width: "100%",
+        maxWidth: 600,
+        height: 400,
+        margin: "20px auto",
+        border: "2px solid #ddd",
+        borderRadius: "8px",
+        padding: "10px",
+        backgroundColor: "#fff",
       }}
     >
-      <MapContainer 
-       center={[35.12011041069839, 33.94002914428712] }
-        zoom={14} 
-        style={{ width: '100%', height: '100%' }}  // Ensure map takes full width and height of the container
+      <MapContainer
+        center={[35.12011041069839, 33.94002914428712]}
+        zoom={14}
+        style={{ width: "100%", height: "100%" }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        <Marker 
-          position={busLocation} 
-          icon={new L.Icon({ iconUrl: '/buslogo.png', iconSize: [30, 30] })}
-        >
-          <Popup>{`Current Location: ${busLocation.lat}, ${busLocation.lng}`}</Popup>
-        </Marker>
-        {/* Next Station Marker */}
-        <Marker position={{ lat: busLocation.lat + 0.01, lng: busLocation.lng + 0.01 }}>
-          <Popup>{nextStation}</Popup>
-        </Marker>
+        {busLocations.map((bus) => (
+          <Marker
+            key={bus.bus_id}
+            position={[bus.latitude, bus.longitude]}
+            icon={busIcon}
+          >
+            <Popup>
+              <div style={{ textAlign: 'center' }}>
+                <strong>Bus {bus.bus_id}</strong>
+                <br />
+                Current Stop: {bus.current_stop || 'N/A'}
+                <br />
+                Next Stop: {bus.next_stop || 'N/A'}
+                <br />
+                Passengers: {bus.passengers || 'N/A'}
+                <br />
+                Estimated Time: {bus.estimated || 'N/A'}
+              </div>
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </Box>
   );
