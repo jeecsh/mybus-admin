@@ -4,7 +4,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined';
 import NaturePeopleOutlinedIcon from '@mui/icons-material/NaturePeopleOutlined';
 import NotificationAddOutlinedIcon from '@mui/icons-material/NotificationAddOutlined';
-import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -58,15 +58,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </Link>
           </li>
           <li>
-            <Link href="/stats" legacyBehavior>
+            <Link href="/history" legacyBehavior>
               <a className={styles.link}>
-                <LeaderboardIcon className={styles.icon} />
-                <span>stats</span>
+                <PsychologyOutlinedIcon className={styles.icon} />
+                <span>logs</span>
               </a>
             </Link>
           </li>
           <li>
-            <Link href="/issues" legacyBehavior>
+            <Link href="/feedback" legacyBehavior>
               <a className={styles.link}>
                 <ReportOutlinedIcon className={styles.icon} />
                 <span>issues</span>

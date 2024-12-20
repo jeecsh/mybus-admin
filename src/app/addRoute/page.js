@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Navbar from '../components/navbar'; 
 import Sidebar from '../components/sidebar'; 
 import MapComponent from '../components/map';
+import Popup from '../components/pop'; // Import Popup component
 import styles from '../addRoute/addRoute.module.css';
 
 export default function AddRoutePage() {
@@ -12,7 +13,9 @@ export default function AddRoutePage() {
   const [routeColor, setRouteColor] = useState('#000000');
   const [routeDescription, setRouteDescription] = useState('');
   const [routeCoordinates, setRouteCoordinates] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(); // Track sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Track sidebar state
+  const [isPopupVisible, setPopupVisible] = useState(false); // Track popup visibility
+  const [popupData, setPopupData] = useState(null); // Data to display in the popup
 
   const handleColorChange = (e) => {
     setRouteColor(e.target.value);
@@ -33,15 +36,24 @@ export default function AddRoutePage() {
       routeCoordinates,
     };
 
-    console.log('Form Data:', formData);
+    // Set up the popup data before showing the confirmation popup
+    setPopupData({
+      title: "Confirm Route Addition",
+      message: `Are you sure you want to add the route "${routeName}" with ID "${routeId}"?`,
+      routeData: formData,
+    });
+    setPopupVisible(true);
+  };
 
+  const handleConfirm = async () => {
     try {
+      // Send the route data API request
       const response = await fetch('http://localhost:3000/api/sendRoute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(popupData.routeData),
       });
 
       if (!response.ok) {
@@ -50,6 +62,26 @@ export default function AddRoutePage() {
 
       const data = await response.json();
       console.log('Route submitted successfully:', data);
+
+      // Log the action (send a log API call)
+      await fetch('/api/logs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          info: `Route titled "${routeName}" with ID "${routeId}" has been added.`,
+          time: new Date().toISOString(),
+        }),
+      });
+
+      // Reset form fields and hide popup after successful submission
+      setRouteId('');
+      setRouteName('');
+      setRouteColor('#000000');
+      setRouteDescription('');
+      setRouteCoordinates([]);
+      setPopupVisible(false);
     } catch (error) {
       console.error('Error submitting route:', error);
     }
@@ -61,9 +93,9 @@ export default function AddRoutePage() {
 
   return (
     <div className={styles.pageLayout}>
-      <Navbar className={styles.navbar}toggleSidebar={toggleSidebar} />
+      <Navbar className={styles.navbar} />
       <div className={styles.mainContent}>
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <div className={`${styles.content} ${!isSidebarOpen ? styles.shifted : ''}`}>
           <h1 className={styles.title}>Add Route</h1>
           <form onSubmit={handleSubmit}>
@@ -117,6 +149,16 @@ export default function AddRoutePage() {
           </form>
         </div>
       </div>
+
+      {/* Popup Component */}
+      {isPopupVisible && (
+        <Popup
+          title={popupData.title}
+          message={popupData.message}
+          onClose={() => setPopupVisible(false)}
+          onConfirm={handleConfirm}
+        />
+      )}
     </div>
   );
 }
