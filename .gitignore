@@ -45,3 +45,5 @@ next-env.d.ts
 src/app/lib
 src/app/sdkFire.json
 src/app/sdkFire.json
+
+echo "!my-app" >> .gitignore
